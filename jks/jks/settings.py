@@ -156,3 +156,12 @@ EMAIL_USE_TLS = True
 EMAIL_USE_SSL = False
 
 BOT_TOKEN = '5695336229:AAFaNQaYOnDLrTYqv9sZnHPs6UoTGSG_EME'
+
+LANGUAGES = (
+    ('ru', 'Russian'),
+    ('en', 'English'),
+    ('kk', 'Kazakhstan'),
+)
+
+MODELTRANSLATION_LANGUAGES = ('ru', 'en', 'kk')
+MODELTRANSLATION_TRANSLATION_REGISTRY = 'jks.translation'

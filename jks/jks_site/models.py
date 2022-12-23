@@ -56,7 +56,7 @@ class MainPage(BasePageModel):
     main_video = models.FileField(upload_to='main/', verbose_name="Видео главной страницы")
     who_are_we = models.CharField(max_length=100, default="Кто мы?", verbose_name="Поле кто мы")
     who_are_we_desc = models.TextField(verbose_name="Кто мы описание")
-    learn_more = models.CharField(max_length=100, default="Узнать больше", verbose_name="Поле узнать больше")
+    learn_more = models.CharField(max_length=100, default="Узнать больше", verbose_name="Кнопка узнать больше")
     projects = models.CharField(max_length=100, default="Проекты", verbose_name="Поле проекты")
     statistics = models.CharField(max_length=100, default="Цифры громче слов", verbose_name="Заголовок статистики")
     influencers = models.CharField(max_length=100, default="Инфлюенсеров", verbose_name="Заголовок инфлюенсеров")
