@@ -1,4 +1,5 @@
 from django.db import models
+from django.utils.safestring import mark_safe
 from django_resized import ResizedImageField
 
 
@@ -6,7 +7,15 @@ class Header(models.Model):
     about_us = models.CharField(max_length=100, default="О нас", verbose_name="О нас")
     projects = models.CharField(max_length=100, default="Проекты", verbose_name="Проекты")
     contacts = models.CharField(max_length=100, default="Контакты", verbose_name="Контакты")
-    logo = ResizedImageField(force_format='WEBP', quality=100, upload_to='header/', verbose_name="")
+    logo = ResizedImageField(force_format='WEBP', quality=100, upload_to='header/', verbose_name="Логотип")
+
+    def logo_image(self):
+        if self.logo:
+            return mark_safe(f'<img src={self.logo.url} width="50" height="60"')
+        else:
+            return '(No image)'
+
+    logo_image.short_description = 'Изображение'
 
 
 class Footer(models.Model):
@@ -69,12 +78,27 @@ class MainPage(BasePageModel):
     views_info = models.CharField(max_length=100, default="1млрд", verbose_name="Значение просмотров")
     partners = models.CharField(max_length=100, default="Партнеры", verbose_name="Заголовок партнеры")
 
+    def main_photo_image(self):
+        if self.main_photo:
+            return mark_safe(f'<img src={self.main_photo.url} width="50" height="60"')
+        else:
+            return '(No image)'
+
+    main_photo_image.short_description = 'Изображение'
+
 
 class Partner(models.Model):
     partner_logo = ResizedImageField(force_format='WEBP', quality=100, upload_to='partner/',
                                      verbose_name="Лого партнера")
     page = models.ForeignKey(MainPage, on_delete=models.SET_NULL, null=True, related_name='main_page_partners')
 
+    def logo_image(self):
+        if self.partner_logo:
+            return mark_safe(f'<img src={self.partner_logo.url} width="50" height="60"')
+        else:
+            return '(No image)'
+
+    logo_image.short_description = 'Изображение'
 
 class Project(models.Model):
     name = models.CharField(max_length=100, verbose_name="Имя проекта")
@@ -85,6 +109,14 @@ class Project(models.Model):
     main_page = models.ForeignKey(MainPage, on_delete=models.SET_NULL, null=True, related_name='main_page_projects')
     project_page = models.ForeignKey('ProjectsPage', on_delete=models.SET_NULL, null=True,
                                      related_name='project_page_projects')
+
+    def projects_foto_image(self):
+        if self.projects_foto:
+            return mark_safe(f'<img src={self.projects_foto.url} width="50" height="60"')
+        else:
+            return '(No image)'
+
+    projects_foto_image.short_description = 'Изображение'
 
 
 class VideoProductionPage(BasePageModel):
@@ -113,6 +145,14 @@ class Content(models.Model):
     content_video = models.FileField(upload_to='video_prod_cont/', default=None, blank=True, null=True,
                                      verbose_name="Видео для страницы видеопродакшн")
 
+    def content_photo_image(self):
+        if self.content_photo:
+            return mark_safe(f'<img src={self.content_photo.url} width="50" height="60"')
+        else:
+            return '(No image)'
+
+    content_photo_image.short_description = 'Изображение'
+
 
 class AboutUsPage(BasePageModel):
     title = models.CharField(max_length=255, default="ВАЙНЕРЫ? УЖЕ НЕТ. JKS- ЭТО МЕДИАКОМПАНИЯ.",
@@ -139,6 +179,14 @@ class People(models.Model):
     photo = ResizedImageField(force_format='WEBP', quality=100, upload_to='about_us/', verbose_name="Фото человека")
     page = models.ForeignKey(AboutUsPage, on_delete=models.SET_NULL, null=True, related_name='about_us_people')
 
+    def photo_image(self):
+        if self.photo:
+            return mark_safe(f'<img src={self.photo.url} width="50" height="60"')
+        else:
+            return '(No image)'
+
+    photo_image.short_description = 'Изображение'
+
 
 class ProjectsPage(BasePageModel):
     title = models.CharField(max_length=255, default="Проекты", verbose_name="Заголовок страницы проекты")
@@ -160,13 +208,13 @@ class Influencer(models.Model):
     statistics = models.CharField(max_length=100, default="Статистика", verbose_name="Заголовок блока статистика")
     instagram_statistics = models.CharField(max_length=100, default="В instagram",
                                             verbose_name="Заголовок статистика инстаграм", blank=True)
-    instagram = models.CharField(max_length=100, default="1M", verbose_name="Статистика инстаграм", blank=True)
+    instagram = models.CharField(max_length=100, verbose_name="Статистика инстаграм", blank=True)
     tiktok_statistics = models.CharField(max_length=100, default="В tiktok", verbose_name="Заголовок статистика tiktok",
                                          blank=True)
-    tiktok = models.CharField(max_length=100, default="26M", verbose_name="Статистика tiktok", blank=True)
+    tiktok = models.CharField(max_length=100, verbose_name="Статистика tiktok", blank=True)
     youtube_statistics = models.CharField(max_length=100, default="В youtube",
                                           verbose_name="Заголовок статистика youtube", blank=True)
-    youtube = models.CharField(max_length=100, default="3.45K", verbose_name="Статистика youtube", blank=True)
+    youtube = models.CharField(max_length=100, verbose_name="Статистика youtube", blank=True)
     description = models.TextField(verbose_name="Описание инфлюенсера/дома")
     page = models.ForeignKey(InfluencersPage, on_delete=models.CASCADE, related_name='influencer')
 
@@ -177,6 +225,12 @@ class InfluncerPhoto(models.Model):
     description = models.TextField(verbose_name="Описание под фото")
     influencer = models.ForeignKey(Influencer, on_delete=models.CASCADE, verbose_name="Отношение к инфлюенсеру",
                                    related_name='influencer_photo')
+
+    def photo_image(self):
+        if self.photo:
+            return mark_safe(f'<img src={self.photo.url} width="50" height="60"')
+        else:
+            return '(No image)'
 
 
 class InfluencerMembers(models.Model):
@@ -194,6 +248,12 @@ class InfluencerMembers(models.Model):
                               verbose_name="Фото участника дома")
     influencer = models.ForeignKey(Influencer, on_delete=models.CASCADE, verbose_name="Отношение к дому",
                                    related_name='influencer_member')
+
+    def photo_image(self):
+        if self.photo:
+            return mark_safe(f'<img src={self.photo.url} width="50" height="60"')
+        else:
+            return '(No image)'
 
 
 class DubStudioPage(BasePageModel):
@@ -221,6 +281,12 @@ class BaseDubProjects(models.Model):
     class Meta:
         abstract = True
 
+    def photo_image(self):
+        if self.photo:
+            return mark_safe(f'<img src={self.photo.url} width="50" height="60"')
+        else:
+            return '(No image)'
+
 
 class DubMovies(BaseDubProjects):
     duration = models.CharField(max_length=100, default="Длительность: ", verbose_name="Длительность")
@@ -237,6 +303,12 @@ class Studio(models.Model):
     logo = ResizedImageField(force_format='WEBP', quality=100, upload_to='dub_studio/', verbose_name="Логотип студии")
     page = models.ForeignKey(DubStudioPage, on_delete=models.CASCADE, related_name='studio')
 
+    def logo_image(self):
+        if self.logo:
+            return mark_safe(f'<img src={self.logo.url} width="50" height="60"')
+        else:
+            return '(No image)'
+
 
 class Voice(models.Model):
     name = models.CharField(max_length=100, verbose_name="Имя переводившего")
@@ -245,6 +317,12 @@ class Voice(models.Model):
     voice = models.FileField(upload_to='dub_studio/', verbose_name="Запись голоса")
     studio = models.ForeignKey(Studio, on_delete=models.CASCADE, verbose_name="Отношение к студии",
                                related_name='voice')
+
+    def photo_image(self):
+        if self.photo:
+            return mark_safe(f'<img src={self.photo.url} width="50" height="60"')
+        else:
+            return '(No image)'
 
 
 class AnimationStudioPage(BasePageModel):
@@ -260,6 +338,12 @@ class SeriesFilmsPage(BasePageModel):
     description = models.TextField(verbose_name="Описание проекта")
     projects = models.CharField(max_length=100, default="Работы", verbose_name="Заголовок работы")
 
+    def photo_image(self):
+        if self.photo:
+            return mark_safe(f'<img src={self.photo.url} width="50" height="60"')
+        else:
+            return '(No image)'
+
 
 class SeriesFilms(models.Model):
     name = models.CharField(max_length=100, verbose_name="Название проекта")
@@ -269,7 +353,15 @@ class SeriesFilms(models.Model):
     genre = models.CharField(max_length=100, default="Жанр: ", verbose_name="Жанр")
     button = models.CharField(max_length=100, default="Смотреть сейчас", verbose_name="Кнопка смотреть сейчас")
     url = models.URLField(verbose_name="Ссылка на проект")
+    photo = ResizedImageField(force_format='WEBP', quality=100, upload_to='series/', verbose_name="Фото проекта", null=True, blank=True)
+    preview = models.FileField(upload_to='series/', verbose_name="Превью проекта", null=True, blank=True)
     page = models.ForeignKey(SeriesFilmsPage, on_delete=models.CASCADE, related_name='series_films')
+
+    def photo_image(self):
+        if self.photo:
+            return mark_safe(f'<img src={self.photo.url} width="50" height="60"')
+        else:
+            return '(No image)'
 
 
 class GameDevPage(BasePageModel):
@@ -294,6 +386,12 @@ class Game(models.Model):
     appstore_url = models.URLField(verbose_name="Ссылка на проект в AppStore")
     googleplay_url = models.URLField(verbose_name="Ссылка на проект в GooglePlay")
     page = models.ForeignKey(GameDevPage, on_delete=models.CASCADE, related_name='games', null=True, blank=True)
+
+    def photo_image(self):
+        if self.photo:
+            return mark_safe(f'<img src={self.photo.url} width="50" height="60"')
+        else:
+            return '(No image)'
 
 
 class Manager(models.Model):

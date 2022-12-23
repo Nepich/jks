@@ -1,133 +1,181 @@
 from django.contrib import admin
+from modeltranslation.admin import TranslationStackedInline, TabbedTranslationAdmin
+
 from .models import *
 
 
-# Register your models here.
 @admin.register(Header)
 class HeaderAdmin(admin.ModelAdmin):
-    fields = ('about_us', 'projects', 'contacts', 'logo')
+    fields = ('about_us', 'projects', 'contacts', 'logo', 'logo_image')
+    readonly_fields = ('logo_image', )
 
 
-@admin.register(ProjectsPage)
-class ProjectsPageAdmin(admin.ModelAdmin):
-    exclude = ('id', )
+class ChoicesAdminInstanceInline(TranslationStackedInline):
+    model = Choices
+    extra = 0
 
 
-@admin.register(Footer)
-class FooterAdmin(admin.ModelAdmin):
-    exclude = ('id', )
+class FooterAdmin(TabbedTranslationAdmin):
+    model = Footer
+    extra = 0
+    inlines = [ChoicesAdminInstanceInline]
 
 
-@admin.register(Choices)
-class ChoicesAdmin(admin.ModelAdmin):
-    exclude = ('id', )
-
-
-@admin.register(Partner)
-class PartnerAdmin(admin.ModelAdmin):
-    exclude = ('id', )
+class PartnerAdminInstanceInline(admin.TabularInline):
+    model = Partner
+    extra = 0
+    readonly_fields = ('partner_logo', )
 
 
 @admin.register(Project)
 class ProjectAdmin(admin.ModelAdmin):
     exclude = ('id', )
+    readonly_fields = ('projects_foto_image', )
 
 
-@admin.register(MainPage)
-class MainPageAdmin(admin.ModelAdmin):
+class ProjectAdminInline(TranslationStackedInline):
+    model = Project
+    exclude = ('id', )
+    extra = 0
+    readonly_fields = ('projects_foto_image', )
+
+
+class MainPageAdmin(TabbedTranslationAdmin):
+    exclude = ('id', )
+    inlines = [PartnerAdminInstanceInline, ProjectAdminInline]
+
+
+class ContentAdminInline(admin.TabularInline):
+    model = Content
+    extra = 0
+    exclude = ('id',)
+    readonly_fields = ('content_photo_image', )
+
+
+class VideoProductionPageAdmin(TabbedTranslationAdmin):
+    exclude = ('id', )
+    inlines = [ContentAdminInline]
+
+
+class PeopleAdmin(TranslationStackedInline):
+    model = People
+    extra = 0
+    readonly_fields = ('photo_image', )
+
+
+class AboutUsPageAdmin(TabbedTranslationAdmin):
+    exclude = ('id', )
+    inlines = [PeopleAdmin]
+
+
+class ProjectsPageAdmin(TabbedTranslationAdmin):
+    exclude = ('id', )
+    inlines = [ProjectAdminInline]
+
+
+class InfluencersMembersAdminInline(TranslationStackedInline):
+    model = InfluencerMembers
+    extra = 0
+    readonly_fields = ('photo_image', )
+
+
+class InfluncerPhotoAdminInline(TranslationStackedInline):
+    model = InfluncerPhoto
+    extra = 0
+    readonly_fields = ('photo_image', )
+
+
+class InfluencerAdmin(TabbedTranslationAdmin):
+    exclude = ('id', )
+    inlines = [InfluencersMembersAdminInline, InfluncerPhotoAdminInline]
+
+
+class InfluencersPageAdmin(TabbedTranslationAdmin):
     exclude = ('id', )
 
 
-@admin.register(Content)
-class ContentAdmin(admin.ModelAdmin):
+class VoiceAdminInline(TranslationStackedInline):
+    model = Voice
     exclude = ('id', )
-
-
-@admin.register(VideoProductionPage)
-class VideoProductionPageAdmin(admin.ModelAdmin):
-    exclude = ('id', )
-
-
-@admin.register(People)
-class PeopleAdmin(admin.ModelAdmin):
-    exclude = ('id', )
-
-
-@admin.register(AboutUsPage)
-class AboutUsPageAdmin(admin.ModelAdmin):
-    exclude = ('id', )
-
-
-@admin.register(InfluencersPage)
-class InfluencersPageAdmin(admin.ModelAdmin):
-    exclude = ('id', )
-
-
-@admin.register(Influencer)
-class InfluencerAdmin(admin.ModelAdmin):
-    exclude = ('id', )
-
-
-@admin.register(InfluencerMembers)
-class InfluencersPageAdmin(admin.ModelAdmin):
-    exclude = ('id', )
-
-
-@admin.register(InfluncerPhoto)
-class InfluncerPhotoAdmin(admin.ModelAdmin):
-    exclude = ('id', )
-
-
-@admin.register(DubStudioPage)
-class DubStudioPagePhotoAdmin(admin.ModelAdmin):
-    exclude = ('id', )
-
-
-@admin.register(DubMovies)
-class DubMoviesAdmin(admin.ModelAdmin):
-    exclude = ('id', )
-
-
-@admin.register(DubSeries)
-class DubSeriesAdmin(admin.ModelAdmin):
-    exclude = ('id', )
+    extra = 0
+    readonly_fields = ('photo_image',)
 
 
 @admin.register(Studio)
 class StudioAdmin(admin.ModelAdmin):
     exclude = ('id', )
+    readonly_fields = ('logo_image',)
+    inlines = [VoiceAdminInline]
 
 
-@admin.register(Voice)
-class VoiceAdmin(admin.ModelAdmin):
+class DubMoviesAdminInline(TranslationStackedInline):
+    model = DubMovies
+    exclude = ('id', )
+    extra = 0
+    readonly_fields = ('photo_image',)
+
+
+class DubSeriesAdminInline(TranslationStackedInline):
+    model = DubSeries
+    exclude = ('id', )
+    extra = 0
+    readonly_fields = ('photo_image',)
+
+
+class DubStudioPageAdmin(TabbedTranslationAdmin):
+    exclude = ('id', )
+    inlines = [DubSeriesAdminInline, DubMoviesAdminInline]
+
+
+class AnimationStudioPageAdmin(TabbedTranslationAdmin):
     exclude = ('id', )
 
 
-@admin.register(AnimationStudioPage)
-class AnimationStudioPageAdmin(admin.ModelAdmin):
+class SeriesFilmsAdminInline(TranslationStackedInline):
+    model = SeriesFilms
     exclude = ('id', )
+    extra = 0
+    readonly_fields = ('photo_image', )
 
 
-@admin.register(SeriesFilms)
-class SeriesFilmsAdmin(admin.ModelAdmin):
+class SeriesFilmsPageAdmin(TabbedTranslationAdmin):
     exclude = ('id', )
+    readonly_fields = ('photo_image', )
+    inlines = [SeriesFilmsAdminInline]
 
 
-@admin.register(SeriesFilmsPage)
-class SeriesFilmsPageAdmin(admin.ModelAdmin):
+class GameAdminInline(TranslationStackedInline):
+    model = Game
     exclude = ('id', )
+    extra = 0
+    readonly_fields = ('photo_image', )
 
 
-@admin.register(Game)
-class GameAdmin(admin.ModelAdmin):
+class GameDevPageAdmin(TabbedTranslationAdmin):
     exclude = ('id', )
+    inlines = [GameAdminInline]
 
 
-@admin.register(GameDevPage)
-class GameDevPageAdmin(admin.ModelAdmin):
-    exclude = ('id', )
+@admin.register(Manager)
+class ManagerAdmin(admin.ModelAdmin):
+    list_display = ('name', 'email')
 
 
-admin.site.register(Form)
-admin.site.register(Manager)
+@admin.register(Form)
+class FormAdmin(admin.ModelAdmin):
+    list_display = ('name', 'phone', 'company', 'type')
+    search_fields = ('name', 'phone')
+
+
+admin.site.register(Footer, FooterAdmin)
+admin.site.register(MainPage, MainPageAdmin)
+admin.site.register(VideoProductionPage, VideoProductionPageAdmin)
+admin.site.register(AboutUsPage, AboutUsPageAdmin)
+admin.site.register(ProjectsPage, ProjectsPageAdmin)
+admin.site.register(Influencer, InfluencerAdmin)
+admin.site.register(InfluencersPage, InfluencersPageAdmin)
+admin.site.register(DubStudioPage, DubStudioPageAdmin)
+admin.site.register(AnimationStudioPage, AnimationStudioPageAdmin)
+admin.site.register(SeriesFilmsPage, SeriesFilmsPageAdmin)
+admin.site.register(GameDevPage, GameDevPageAdmin)
 

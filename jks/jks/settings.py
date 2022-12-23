@@ -15,7 +15,6 @@ from pathlib import Path
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
 
@@ -26,7 +25,6 @@ SECRET_KEY = 'django-insecure-jce%upoojg5a&vno(*w-=0c6nw9_6aoro9j*b2j-rmnj&1gai3
 DEBUG = True
 
 ALLOWED_HOSTS = []
-
 
 # Application definition
 
@@ -82,7 +80,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'jks.wsgi.application'
 
-
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
@@ -90,11 +87,10 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db.sqlite3',
-# For deploy
-#         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        # For deploy
+        #         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators
@@ -114,7 +110,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/4.1/topics/i18n/
 
@@ -125,7 +120,6 @@ TIME_ZONE = 'Asia/Almaty'
 USE_I18N = True
 
 USE_TZ = True
-
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
@@ -151,11 +145,11 @@ INTERNAL_IPS = [
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_HOST_USER = "nepich@gmail.com"
-EMAIL_HOST_PASSWORD = "htgnegwnhcgjjxuv"
+EMAIL_HOST_PASSWORD = "uevvbakxbhcoueay"
 EMAIL_USE_TLS = True
 EMAIL_USE_SSL = False
 
-BOT_TOKEN = '5695336229:AAFaNQaYOnDLrTYqv9sZnHPs6UoTGSG_EME'
+BOT_TOKEN =
 
 LANGUAGES = (
     ('ru', 'Russian'),
@@ -165,3 +159,33 @@ LANGUAGES = (
 
 MODELTRANSLATION_LANGUAGES = ('ru', 'en', 'kk')
 MODELTRANSLATION_TRANSLATION_REGISTRY = 'jks.translation'
+
+JAZZMIN_SETTINGS = {
+    "site_brand": "JKS admin",
+    "welcome_sign": "Welcome to the JKS admin",
+    "topmenu_links": [
+
+        # Url that gets reversed (Permissions can be added)
+        {"name": "Home", "url": "admin:index", "permissions": ["auth.view_user"]},
+
+        # model admin to link to (Permissions checked against model)
+        {"model": "auth.User"},
+        {"model": "jks_site.Manager"},
+        {"model": "jks_site.Form"},
+        # App with dropdown menu to all its models pages (Permissions checked against models)
+        # {"app": "food_packaging_admin"},
+    ],
+    "show_sidebar": True,
+    "changeform_format_overrides": {"jks_site.MainPage": "vertical_tabs",
+                                    "jks_site.VideoProductionPage": "vertical_tabs",
+                                    "jks_site.AboutUsPage": "vertical_tabs",
+                                    "jks_site.ProjectsPage": "vertical_tabs",
+                                    "jks_site.InfluencersPage": "vertical_tabs",
+                                    "jks_site.Influencer": "vertical_tabs",
+                                    # "jks.InfluncerPhoto": "collapsible",
+                                    "jks_site.DubStudioPage": "vertical_tabs",
+                                    "jks_site.Studio": "vertical_tabs",
+                                    "jks_site.AnimationStudioPage": "vertical_tabs",
+                                    "jks_site.SeriesFilmsPage": "vertical_tabs",
+                                    "jks_site.GameDevPage": "vertical_tabs"},
+}
