@@ -7,7 +7,7 @@ from .models import Manager
 from .serializers import MainPageSerializer, VideoProductionPageSerializer, AboutUsPageSerializer, \
     ProjectsPageSerializer, InfluencersPageSerializer, InfluencerDetailSerializer, DubStudioPageSerializer, \
     AnimationStudioPageSerializer, SeriesFilmsPageSerializer, GameDevPageSerializer, FormSerializer
-from .services import send_html_mail
+from .services import send_notifications
 
 
 class BasePageView(RetrieveAPIView):
@@ -116,15 +116,8 @@ class FormView(CreateAPIView):
         try:
             mail_to = [recepient['email'] for recepient in Manager.objects.all().values('email')]
             data = self.request.data
-            name = data["name"]
-            email = data["email"]
-            phone = data["phone"]
-            company = data["company"]
             interest = apps.get_model(app_label='jks_site', model_name='Choices').objects.get(pk=data["type"]).type
-            send_html_mail('Новая заявка',
-                           f'Имя: {name}<br>Email: {email}<br>Телефон: {phone}<br>'
-                           f'Компания: {company}<br>Интересуются: {interest}',
-                           mail_to)
+            send_notifications(self.request.data, interest, mail_to)
             serializer.save()
         except Exception as e:
             print(e)
