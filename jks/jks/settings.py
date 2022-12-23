@@ -149,7 +149,7 @@ EMAIL_HOST_PASSWORD = "uevvbakxbhcoueay"
 EMAIL_USE_TLS = True
 EMAIL_USE_SSL = False
 
-BOT_TOKEN =
+BOT_TOKEN = '5695336229:AAFaNQaYOnDLrTYqv9sZnHPs6UoTGSG_EME'
 
 LANGUAGES = (
     ('ru', 'Russian'),
@@ -178,11 +178,12 @@ JAZZMIN_SETTINGS = {
     "show_sidebar": True,
     "changeform_format_overrides": {"jks_site.MainPage": "vertical_tabs",
                                     "jks_site.VideoProductionPage": "vertical_tabs",
+                                    "jks_site.Partner": "vertical_tabs",
+                                    "jks_site.Footer": "vertical_tabs",
                                     "jks_site.AboutUsPage": "vertical_tabs",
                                     "jks_site.ProjectsPage": "vertical_tabs",
                                     "jks_site.InfluencersPage": "vertical_tabs",
                                     "jks_site.Influencer": "vertical_tabs",
-                                    # "jks.InfluncerPhoto": "collapsible",
                                     "jks_site.DubStudioPage": "vertical_tabs",
                                     "jks_site.Studio": "vertical_tabs",
                                     "jks_site.AnimationStudioPage": "vertical_tabs",

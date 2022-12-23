@@ -24,13 +24,7 @@ class FooterAdmin(TabbedTranslationAdmin):
 class PartnerAdminInstanceInline(admin.TabularInline):
     model = Partner
     extra = 0
-    readonly_fields = ('partner_logo', )
-
-
-@admin.register(Project)
-class ProjectAdmin(admin.ModelAdmin):
-    exclude = ('id', )
-    readonly_fields = ('projects_foto_image', )
+    readonly_fields = ('logo_image', )
 
 
 class ProjectAdminInline(TranslationStackedInline):
