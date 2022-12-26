@@ -7,12 +7,11 @@ from .models import Manager
 from .serializers import MainPageSerializer, VideoProductionPageSerializer, AboutUsPageSerializer, \
     ProjectsPageSerializer, InfluencersPageSerializer, InfluencerDetailSerializer, DubStudioPageSerializer, \
     AnimationStudioPageSerializer, SeriesFilmsPageSerializer, GameDevPageSerializer, FormSerializer
-from .services import send_notifications
 from .tasks import send_mail, send_telegram
 
 
 class BasePageView(RetrieveAPIView):
-    """View to get landing context"""
+    """BasePageView"""
     queryset = None
     serializer_class = None
     pk = None
@@ -29,6 +28,7 @@ class BasePageView(RetrieveAPIView):
 
 
 class MainPageView(BasePageView):
+    """MainPageView"""
     queryset = apps.get_model(app_label='jks_site', model_name='MainPage')
     serializer_class = MainPageSerializer
     pk = 1

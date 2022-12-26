@@ -35,7 +35,7 @@ class ProjectAdminInline(TranslationStackedInline):
 
 
 class MainPageAdmin(TabbedTranslationAdmin):
-    exclude = ('id', )
+    exclude = ('id', 'footer', 'header')
     inlines = [PartnerAdminInstanceInline, ProjectAdminInline]
 
 

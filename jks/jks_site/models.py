@@ -7,11 +7,16 @@ class Header(models.Model):
     about_us = models.CharField(max_length=100, default="О нас", verbose_name="О нас")
     projects = models.CharField(max_length=100, default="Проекты", verbose_name="Проекты")
     contacts = models.CharField(max_length=100, default="Контакты", verbose_name="Контакты")
-    logo = ResizedImageField(force_format='WEBP', quality=100, upload_to='header/', verbose_name="Логотип")
+    logo = ResizedImageField(force_format='WEBP', quality=100, upload_to='header/', verbose_name="Логотип", blank=True)
 
     class Meta:
         verbose_name = 'Хэдер'
         verbose_name_plural = 'Хэдер'
+
+    def save(self, *args, **kwargs):
+        if self.__class__.objects.count():
+            self.pk = self.__class__.objects.first().pk
+        super().save(*args, **kwargs)
 
     def __str__(self):
         return 'Хэдер'
@@ -43,6 +48,11 @@ class Footer(models.Model):
     class Meta:
         verbose_name = 'Футер'
         verbose_name_plural = 'Футер'
+
+    def save(self, *args, **kwargs):
+        if self.__class__.objects.count():
+            self.pk = self.__class__.objects.first().pk
+        super().save(*args, **kwargs)
 
     def __str__(self):
         return 'Футер'
@@ -76,8 +86,8 @@ class Form(models.Model):
 
 
 class BasePageModel(models.Model):
-    header = models.ForeignKey(Header, on_delete=models.SET_NULL, null=True, verbose_name="Хэдер")
-    footer = models.ForeignKey(Footer, on_delete=models.SET_NULL, null=True, verbose_name="Футер")
+    header = models.ForeignKey(Header, on_delete=models.SET_NULL, null=True, default=1, verbose_name="Хэдер")
+    footer = models.ForeignKey(Footer, on_delete=models.SET_NULL, null=True, default=1, verbose_name="Футер")
 
     class Meta:
         abstract = True
@@ -85,8 +95,8 @@ class BasePageModel(models.Model):
 
 class MainPage(BasePageModel):
     main_photo = ResizedImageField(force_format='WEBP', quality=100, upload_to='main/',
-                                   verbose_name="Фото главной страницы")
-    main_video = models.FileField(upload_to='main/', verbose_name="Видео главной страницы")
+                                   verbose_name="Фото главной страницы", blank=True)
+    main_video = models.FileField(upload_to='main/', verbose_name="Видео главной страницы", blank=True)
     who_are_we = models.CharField(max_length=100, default="Кто мы?", verbose_name="Поле кто мы")
     who_are_we_desc = models.TextField(verbose_name="Кто мы описание")
     learn_more = models.CharField(max_length=100, default="Узнать больше", verbose_name="Кнопка узнать больше")
@@ -106,6 +116,11 @@ class MainPage(BasePageModel):
         verbose_name = 'Главная страница'
         verbose_name_plural = 'Главная страница'
 
+    def save(self, *args, **kwargs):
+        if self.__class__.objects.count():
+            self.pk = self.__class__.objects.first().pk
+        super().save(*args, **kwargs)
+
     def __str__(self):
         return 'Главная страница'
 
@@ -122,7 +137,8 @@ class Partner(models.Model):
     name = models.CharField(max_length=100, default="", verbose_name="Название партнера")
     partner_logo = ResizedImageField(force_format='WEBP', quality=100, upload_to='partner/',
                                      verbose_name="Лого партнера")
-    page = models.ForeignKey(MainPage, on_delete=models.SET_NULL, null=True, related_name='main_page_partners')
+    page = models.ForeignKey(MainPage, on_delete=models.SET_NULL, null=True, default=1,
+                             related_name='main_page_partners')
 
     class Meta:
         verbose_name = 'Партнер'
@@ -144,7 +160,7 @@ class Project(models.Model):
     name = models.CharField(max_length=100, verbose_name="Имя проекта")
     description = models.TextField(verbose_name="Описание проекта")
     projects_foto = ResizedImageField(force_format='WEBP', quality=100, upload_to='projects/',
-                                      verbose_name="Фото проекта")
+                                      verbose_name="Фото проекта", blank=True)
     projects_video = models.FileField(upload_to='projects/')
     main_page = models.ForeignKey(MainPage, on_delete=models.SET_NULL, null=True, related_name='main_page_projects')
     project_page = models.ForeignKey('ProjectsPage', on_delete=models.SET_NULL, null=True,
@@ -188,12 +204,18 @@ class VideoProductionPage(BasePageModel):
         verbose_name = 'Страница "Видеопродакшн"'
         verbose_name_plural = 'Страница "Видеопродакшн"'
 
+    def save(self, *args, **kwargs):
+        if self.__class__.objects.count():
+            self.pk = self.__class__.objects.first().pk
+        super().save(*args, **kwargs)
+
     def __str__(self):
         return 'Страница "Видеопродакшн"'
 
 
 class Content(models.Model):
-    page = models.ForeignKey(VideoProductionPage, on_delete=models.SET_NULL, null=True, related_name='page_content')
+    page = models.ForeignKey(VideoProductionPage, on_delete=models.SET_NULL, null=True, related_name='page_content',
+                             default=1)
     content_photo = ResizedImageField(force_format='WEBP', quality=100, upload_to='main/',
                                       verbose_name="Фото для страницы видеопродакшн")
     content_video = models.FileField(upload_to='video_prod_cont/', default=None, blank=True, null=True,
@@ -223,16 +245,27 @@ class AboutUsPage(BasePageModel):
     sixth_text = models.TextField(verbose_name="Шестой текст")
     seventh_text = models.TextField(verbose_name="Седьмой текст")
     eighth_text = models.TextField(verbose_name="Восьмой текст")
-    photo_background1 = ResizedImageField(quality=100, upload_to='about_us/', verbose_name="Фото подложки 1")
-    photo_background2 = ResizedImageField(quality=100, upload_to='about_us/', verbose_name="Фото подложки 2")
-    photo_background3 = ResizedImageField(quality=100, upload_to='about_us/', verbose_name="Фото подложки 3")
-    photo_background4 = ResizedImageField(quality=100, upload_to='about_us/', verbose_name="Фото подложки 4")
-    photo_background5 = ResizedImageField(quality=100, upload_to='about_us/', verbose_name="Фото подложки 5")
-    photo_background6 = ResizedImageField(quality=100, upload_to='about_us/', verbose_name="Фото подложки 6")
+    photo_background1 = ResizedImageField(quality=100, upload_to='about_us/',
+                                          verbose_name="Фото подложки 1", blank=True)
+    photo_background2 = ResizedImageField(quality=100, upload_to='about_us/',
+                                          verbose_name="Фото подложки 2", blank=True)
+    photo_background3 = ResizedImageField(quality=100, upload_to='about_us/',
+                                          verbose_name="Фото подложки 3", blank=True)
+    photo_background4 = ResizedImageField(quality=100, upload_to='about_us/',
+                                          verbose_name="Фото подложки 4", blank=True)
+    photo_background5 = ResizedImageField(quality=100, upload_to='about_us/',
+                                          verbose_name="Фото подложки 5", blank=True)
+    photo_background6 = ResizedImageField(quality=100, upload_to='about_us/',
+                                          verbose_name="Фото подложки 6", blank=True)
 
     class Meta:
         verbose_name = 'Страница "О нас"'
         verbose_name_plural = 'Страница "О нас"'
+
+    def save(self, *args, **kwargs):
+        if self.__class__.objects.count():
+            self.pk = self.__class__.objects.first().pk
+        super().save(*args, **kwargs)
 
     def __str__(self):
         return 'Страница "О нас"'
@@ -241,8 +274,10 @@ class AboutUsPage(BasePageModel):
 class People(models.Model):
     name = models.CharField(max_length=100, verbose_name="Имя")
     position = models.CharField(max_length=255, verbose_name="Должность")
-    photo = ResizedImageField(force_format='WEBP', quality=100, upload_to='about_us/', verbose_name="Фото человека")
-    page = models.ForeignKey(AboutUsPage, on_delete=models.SET_NULL, null=True, related_name='about_us_people')
+    photo = ResizedImageField(force_format='WEBP', quality=100, upload_to='about_us/', verbose_name="Фото человека",
+                              blank=True)
+    page = models.ForeignKey(AboutUsPage, on_delete=models.SET_NULL, null=True, default=1,
+                             related_name='about_us_people')
 
     class Meta:
         verbose_name = 'Люди страницы "О нас"'
@@ -263,6 +298,11 @@ class People(models.Model):
 class ProjectsPage(BasePageModel):
     title = models.CharField(max_length=255, default="Проекты", verbose_name="Заголовок страницы проекты")
 
+    def save(self, *args, **kwargs):
+        if self.__class__.objects.count():
+            self.pk = self.__class__.objects.first().pk
+        super().save(*args, **kwargs)
+
     class Meta:
         verbose_name = 'Страница "Проекты"'
         verbose_name_plural = 'Страница "Проекты"'
@@ -282,6 +322,11 @@ class InfluencersPage(BasePageModel):
     class Meta:
         verbose_name = 'Страница "Инфлюенсеры"'
         verbose_name_plural = 'Страница "Инфлюенсеры"'
+
+    def save(self, *args, **kwargs):
+        if self.__class__.objects.count():
+            self.pk = self.__class__.objects.first().pk
+        super().save(*args, **kwargs)
 
     def __str__(self):
         return 'Страница "Инфлюенсеры"'
@@ -379,6 +424,11 @@ class DubStudioPage(BasePageModel):
         verbose_name = 'Страница "Студия дубляжа"'
         verbose_name_plural = 'Страница "Студия дубляжа"'
 
+    def save(self, *args, **kwargs):
+        if self.__class__.objects.count():
+            self.pk = self.__class__.objects.first().pk
+        super().save(*args, **kwargs)
+
     def __str__(self):
         return 'Страница "Студия дубляжа"'
 
@@ -468,6 +518,11 @@ class AnimationStudioPage(BasePageModel):
         verbose_name = 'Страница "Студия анимации"'
         verbose_name_plural = 'Страница "Студия анимации"'
 
+    def save(self, *args, **kwargs):
+        if self.__class__.objects.count():
+            self.pk = self.__class__.objects.first().pk
+        super().save(*args, **kwargs)
+
     def __str__(self):
         return 'Страница "Студия анимации"'
 
@@ -482,6 +537,11 @@ class SeriesFilmsPage(BasePageModel):
     class Meta:
         verbose_name = 'Страница "Сериалы-фильмы"'
         verbose_name_plural = 'Страница "Сериалы-фильмы"'
+
+    def save(self, *args, **kwargs):
+        if self.__class__.objects.count():
+            self.pk = self.__class__.objects.first().pk
+        super().save(*args, **kwargs)
 
     def __str__(self):
         return 'Страница "Сериалы-фильмы"'
@@ -522,6 +582,11 @@ class GameDevPage(BasePageModel):
     photo_background1 = ResizedImageField(quality=100, upload_to='game_dev/', verbose_name="Фото подложки 1")
     photo_background2 = ResizedImageField(quality=100, upload_to='game_dev/', verbose_name="Фото подложки 2")
     photo_background3 = ResizedImageField(quality=100, upload_to='game_dev/', verbose_name="Фото подложки 3")
+
+    def save(self, *args, **kwargs):
+        if self.__class__.objects.count():
+            self.pk = self.__class__.objects.first().pk
+        super().save(*args, **kwargs)
 
     class Meta:
         verbose_name = 'Страница "Разработка игр"'
@@ -568,5 +633,3 @@ class Manager(models.Model):
 
     def __str__(self):
         return f'Менеджер {self.name}'
-
-
