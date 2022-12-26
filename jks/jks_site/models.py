@@ -287,7 +287,7 @@ class InfluencersPage(BasePageModel):
         return 'Страница "Инфлюенсеры"'
 
 
-class Influencer(models.Model):
+class Influencer(BasePageModel, models.Model):
     logo = ResizedImageField(force_format='WEBP', quality=100, upload_to='influencer/',
                              verbose_name="Логотип инфлюенсера/дома")
     name = models.CharField(max_length=100, default="", verbose_name="Имя/название дома")
@@ -436,12 +436,6 @@ class Studio(models.Model):
     def __str__(self):
         return f'Студия {self.name}'
 
-    def logo_image(self):
-        if self.logo:
-            return mark_safe(f'<img src={self.logo.url} width="50" height="60"')
-        else:
-            return '(No image)'
-
 
 class Voice(models.Model):
     name = models.CharField(max_length=100, verbose_name="Имя переводившего")
@@ -491,12 +485,6 @@ class SeriesFilmsPage(BasePageModel):
 
     def __str__(self):
         return 'Страница "Сериалы-фильмы"'
-
-    def photo_image(self):
-        if self.photo:
-            return mark_safe(f'<img src={self.photo.url} width="50" height="60"')
-        else:
-            return '(No image)'
 
 
 class SeriesFilms(models.Model):

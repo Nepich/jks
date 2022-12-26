@@ -7,13 +7,13 @@ from rest_framework import serializers
 class HeaderSerializer(serializers.ModelSerializer):
     class Meta:
         model = apps.get_model(app_label='jks_site', model_name='Header')
-        exclude = ('id', )
+        fields = ('about_us', 'projects', 'contacts', 'logo')
 
 
 class ChoicesSerializer(serializers.ModelSerializer):
     class Meta:
         model = apps.get_model(app_label='jks_site', model_name='Choices')
-        exclude = ('footer', )
+        fields = ('id', 'type')
 
 
 class FooterSerializer(serializers.ModelSerializer):
@@ -21,7 +21,9 @@ class FooterSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = apps.get_model(app_label='jks_site', model_name='Footer')
-        exclude = ('id', )
+        fields = ('text_us', 'interests', 'about_u', 'company_name', 'company_description',
+                  'tiktok_url', 'instagram_url', 'mail_field', 'contact_info', 'services',
+                  'about_us', 'phone', 'footer_choices')
 
 
 class FormSerializer(serializers.ModelSerializer):
@@ -39,7 +41,7 @@ class ProjectMainPageSerializer(serializers.ModelSerializer):
 class PartnerSerializer(serializers.ModelSerializer):
     class Meta:
         model = apps.get_model(app_label='jks_site', model_name='Partner')
-        exclude = ('id', 'page')
+        fields = ('partner_logo', )
 
 
 class BasePageSerializer(serializers.Serializer):
@@ -53,7 +55,10 @@ class MainPageSerializer(BasePageSerializer, serializers.ModelSerializer):
 
     class Meta:
         model = apps.get_model(app_label='jks_site', model_name='MainPage')
-        exclude = ('id',)
+        fields = ('header', 'main_photo', 'main_video', 'who_are_we', 'who_are_we_desc', 'learn_more',
+                  'projects', 'statistics', 'influencers', 'influencers_info', 'subscribers',
+                  'subscribers_info', 'likes', 'likes_info', 'views', 'views_info', 'partners',
+                  'main_page_projects', 'main_page_partners', 'footer')
 
 
 class VideoProductionPageContentSerializer(serializers.ModelSerializer):
@@ -76,13 +81,15 @@ class VideoProductionPageSerializer(BasePageSerializer, serializers.ModelSeriali
 
     class Meta:
         model = apps.get_model(app_label='jks_site', model_name='VideoProductionPage')
-        exclude = ('id', )
+        fields = ('header', 'title', 'what_we_filming', 'page_content', 'first_product', 'first_product_desc',
+                  'second_product', 'second_product_desc', 'third_product', 'third_product_desc', 'fourth_product',
+                  'fourth_product_desc', 'offer', 'footer')
 
 
 class PeopleSerializer(serializers.ModelSerializer):
     class Meta:
         model = apps.get_model(app_label='jks_site', model_name='People')
-        exclude = ('id', 'page')
+        fields = ('name', 'position', 'photo')
 
 
 class AboutUsPageSerializer(BasePageSerializer, serializers.ModelSerializer):
@@ -90,13 +97,15 @@ class AboutUsPageSerializer(BasePageSerializer, serializers.ModelSerializer):
 
     class Meta:
         model = apps.get_model(app_label='jks_site', model_name='AboutUsPage')
-        exclude = ('id', )
+        fields = ('header', 'title', 'about_us_people', 'first_text', 'second_text', 'third_text', 'fourth_text',
+                  'fifth_text', 'sixth_text', 'seventh_text', 'eighth_text', 'photo_background1', 'photo_background2',
+                  'photo_background3', 'photo_background4', 'photo_background5', 'photo_background6', 'footer')
 
 
 class ProjectProjectsPageSerializer(serializers.ModelSerializer):
     class Meta:
         model = apps.get_model(app_label='jks_site', model_name='Project')
-        exclude = ('id', 'main_page', 'project_page')
+        fields = ('name', 'description', 'projects_foto', 'projects_video')
 
 
 class ProjectsPageSerializer(BasePageSerializer, serializers.ModelSerializer):
@@ -104,26 +113,23 @@ class ProjectsPageSerializer(BasePageSerializer, serializers.ModelSerializer):
 
     class Meta:
         model = apps.get_model(app_label='jks_site', model_name='ProjectsPage')
-        exclude = ('id', )
+        fields = ('header', 'title', 'project_page_projects', 'footer')
 
 
 class InfluncerPhotoSerializer(serializers.ModelSerializer):
     class Meta:
         model = apps.get_model(app_label='jks_site', model_name='InfluncerPhoto')
-        exclude = ('id', 'influencer')
+        fields = ('photo', 'description')
 
 
 class InfluencerMembersSerializer(serializers.ModelSerializer):
-    fields_to_be_removed = ('instagram_statistics',
-                            'instagram',
-                            'tiktok_statistics',
-                            'tiktok',
-                            'youtube_statistics',
-                            'youtube')
+    fields_to_be_removed = ('instagram_statistics', 'instagram', 'tiktok_statistics',
+                            'tiktok', 'youtube_statistics', 'youtube')
 
     class Meta:
         model = apps.get_model(app_label='jks_site', model_name='InfluencerMembers')
-        exclude = ('id', 'influencer')
+        fields = ('name', 'instagram_statistics', 'instagram', 'tiktok_statistics', 'tiktok', 'youtube_statistics',
+                  'youtube', 'photo')
 
     def to_representation(self, instance):
         rep = super(InfluencerMembersSerializer, self).to_representation(instance)
@@ -133,21 +139,17 @@ class InfluencerMembersSerializer(serializers.ModelSerializer):
         return rep
 
 
-class InfluencerDetailSerializer(serializers.ModelSerializer):
+class InfluencerDetailSerializer(BasePageSerializer, serializers.ModelSerializer):
     influencer_photo = InfluncerPhotoSerializer(many=True, read_only=True)
     influencer_member = InfluencerMembersSerializer(many=True, read_only=True)
-    fields_to_be_removed = ('influencer_photo',
-                            'influencer_member',
-                            'instagram_statistics',
-                            'instagram',
-                            'tiktok_statistics',
-                            'tiktok',
-                            'youtube_statistics',
-                            'youtube')
+    fields_to_be_removed = ('influencer_photo', 'influencer_member', 'instagram_statistics', 'instagram',
+                            'tiktok_statistics', 'tiktok', 'youtube_statistics', 'youtube')
 
     class Meta:
         model = apps.get_model(app_label='jks_site', model_name='Influencer')
-        exclude = ('id', 'page')
+        fields = ('header', 'logo', 'name', 'statistics', 'instagram_statistics', 'instagram', 'tiktok_statistics',
+                  'tiktok', 'youtube_statistics', 'youtube', 'description', 'influencer_photo', 'influencer_member',
+                  'footer')
 
     def to_representation(self, instance):
         rep = super(InfluencerDetailSerializer, self).to_representation(instance)
@@ -158,23 +160,13 @@ class InfluencerDetailSerializer(serializers.ModelSerializer):
 
 
 class InfluencerSerializer(serializers.ModelSerializer):
-    fields_to_be_removed = ('instagram_statistics',
-                            'instagram',
-                            'tiktok_statistics',
-                            'tiktok',
-                            'youtube_statistics',
-                            'youtube')
+    fields_to_be_removed = ('instagram_statistics', 'instagram', 'tiktok_statistics',
+                            'tiktok', 'youtube_statistics', 'youtube')
 
     class Meta:
         model = apps.get_model(app_label='jks_site', model_name='Influencer')
-        fields = ('id',
-                  'name',
-                  'instagram_statistics',
-                  'instagram',
-                  'tiktok_statistics',
-                  'tiktok',
-                  'youtube_statistics',
-                  'youtube')
+        fields = ('id', 'name', 'instagram_statistics', 'instagram', 'tiktok_statistics', 'tiktok',
+                  'youtube_statistics', 'youtube')
 
     def to_representation(self, instance):
         rep = super(InfluencerSerializer, self).to_representation(instance)
@@ -189,13 +181,13 @@ class InfluencersPageSerializer(BasePageSerializer, serializers.ModelSerializer)
 
     class Meta:
         model = apps.get_model(app_label='jks_site', model_name='InfluencersPage')
-        exclude = ('id', )
+        fields = ('header', 'title', 'influencer', 'first_text', 'second_text', 'third_text', 'footer')
 
 
 class VoiceSerializer(serializers.ModelSerializer):
     class Meta:
         model = apps.get_model(app_label='jks_site', model_name='Voice')
-        exclude = ('id', 'studio')
+        fields = ('name', 'photo', 'voice')
 
 
 class StudioSerializer(serializers.ModelSerializer):
@@ -203,19 +195,21 @@ class StudioSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = apps.get_model(app_label='jks_site', model_name='Studio')
-        exclude = ('id', 'page')
+        fields = ('logo', 'voice')
 
 
 class DubSeriesSerializer(serializers.ModelSerializer):
     class Meta:
         model = apps.get_model(app_label='jks_site', model_name='DubSeries')
-        exclude = ('id', )
+        fields = ('photo', 'preview', 'name', 'total_series', 'dub_series', 'dub_language',
+                  'translated_by', 'button', 'url')
 
 
 class DubMoviesSerializer(serializers.ModelSerializer):
     class Meta:
         model = apps.get_model(app_label='jks_site', model_name='DubMovies')
-        exclude = ('id', )
+        fields = ('photo', 'preview', 'name', 'duration', 'dub_language',
+                  'translated_by', 'button', 'url')
 
 
 class DubStudioPageSerializer(BasePageSerializer, serializers.ModelSerializer):
@@ -226,7 +220,9 @@ class DubStudioPageSerializer(BasePageSerializer, serializers.ModelSerializer):
 
     class Meta:
         model = apps.get_model(app_label='jks_site', model_name='DubStudioPage')
-        exclude = ('id', )
+        fields = ('header', 'photo', 'video', 'studio', 'first_text', 'first_text_desc', 'second_text',
+                  'second_text_desc', 'third_text', 'third_text_desc', 'projects', 'series_projects',
+                  'movie_projects', 'footer')
 
     def to_representation(self, instance):
         rep = super(DubStudioPageSerializer, self).to_representation(instance)
@@ -239,13 +235,14 @@ class DubStudioPageSerializer(BasePageSerializer, serializers.ModelSerializer):
 class AnimationStudioPageSerializer(BasePageSerializer, serializers.ModelSerializer):
     class Meta:
         model = apps.get_model(app_label='jks_site', model_name='AnimationStudioPage')
-        exclude = ('id', )
+        fields = ('header', 'title', 'field', 'footer')
 
 
 class SeriesFilmsSerializer(serializers.ModelSerializer):
     class Meta:
         model = apps.get_model(app_label='jks_site', model_name='SeriesFilms')
-        exclude = ('id', )
+        fields = ('name', 'age', 'series_number', 'language', 'genre',
+                  'button', 'url', 'photo', 'preview')
 
 
 class SeriesFilmsPageSerializer(BasePageSerializer, serializers.ModelSerializer):
@@ -253,13 +250,14 @@ class SeriesFilmsPageSerializer(BasePageSerializer, serializers.ModelSerializer)
 
     class Meta:
         model = apps.get_model(app_label='jks_site', model_name='SeriesFilmsPage')
-        exclude = ('id', )
+        fields = ('header', 'photo', 'title', 'description', 'projects', 'series_films', 'footer')
 
 
 class GameSerializer(serializers.ModelSerializer):
     class Meta:
         model = apps.get_model(app_label='jks_site', model_name='Game')
-        exclude = ('id', 'page')
+        fields = ('name', 'photo', 'statistics', 'ios_statistics', 'ios', 'android_statistics',
+                  'android', 'title', 'appstore_url', 'googleplay_url')
 
 
 class GameDevPageSerializer(BasePageSerializer, serializers.ModelSerializer):
@@ -267,4 +265,5 @@ class GameDevPageSerializer(BasePageSerializer, serializers.ModelSerializer):
 
     class Meta:
         model = apps.get_model(app_label='jks_site', model_name='GameDevPage')
-        exclude = ('id', )
+        fields = ('header', 'title', 'games', 'first_text', 'first_text_desc', 'second_text',
+                  'second_text_desc', 'photo_background1', 'photo_background2', 'photo_background3', 'footer')

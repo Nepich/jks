@@ -98,7 +98,6 @@ class VoiceAdminInline(TranslationStackedInline):
 @admin.register(Studio)
 class StudioAdmin(admin.ModelAdmin):
     exclude = ('id', )
-    readonly_fields = ('logo_image',)
     inlines = [VoiceAdminInline]
 
 
@@ -134,7 +133,6 @@ class SeriesFilmsAdminInline(TranslationStackedInline):
 
 class SeriesFilmsPageAdmin(TabbedTranslationAdmin):
     exclude = ('id', )
-    readonly_fields = ('photo_image', )
     inlines = [SeriesFilmsAdminInline]
 
 
