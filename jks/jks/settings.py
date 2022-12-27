@@ -28,7 +28,7 @@ SECRET_KEY = os.environ.get('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get('DEBUG')
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 # Application definition
 
@@ -48,7 +48,6 @@ INSTALLED_APPS = [
     'corsheaders',
     'django_cleanup.apps.CleanupConfig',
     'debug_toolbar',
-    'corsheaders',
 
     'jks_site',
 ]

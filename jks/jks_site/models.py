@@ -190,14 +190,14 @@ class VideoProductionPage(BasePageModel):
                                      verbose_name="Заголовок первой услуги")
     first_product_desc = models.TextField(verbose_name="Описание первой услуги")
     second_product = models.CharField(max_length=100, default="Среднемасштабный продакшн",
-                                      verbose_name="Заголовок первой услуги")
-    second_product_desc = models.TextField(verbose_name="Описание первой услуги")
+                                      verbose_name="Заголовок второй услуги")
+    second_product_desc = models.TextField(verbose_name="Описание второй услуги")
     third_product = models.CharField(max_length=100, default="Крупномасштабный продакшн",
-                                     verbose_name="Заголовок первой услуги")
-    third_product_desc = models.TextField(verbose_name="Описание первой услуги")
+                                     verbose_name="Заголовок третьей услуги")
+    third_product_desc = models.TextField(verbose_name="Описание третьей услуги")
     fourth_product = models.CharField(max_length=100, default="Анимация (CGI)",
-                                      verbose_name="Заголовок первой услуги")
-    fourth_product_desc = models.TextField(verbose_name="Описание первой услуги")
+                                      verbose_name="Заголовок четвертой услуги")
+    fourth_product_desc = models.TextField(verbose_name="Описание четвертой услуги")
     offer = models.TextField(verbose_name="Предложение")
 
     class Meta:

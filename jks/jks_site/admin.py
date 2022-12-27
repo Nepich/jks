@@ -42,12 +42,12 @@ class MainPageAdmin(TabbedTranslationAdmin):
 class ContentAdminInline(admin.TabularInline):
     model = Content
     extra = 0
-    exclude = ('id',)
+    exclude = ('id', )
     readonly_fields = ('content_photo_image', )
 
 
 class VideoProductionPageAdmin(TabbedTranslationAdmin):
-    exclude = ('id', )
+    exclude = ('id', 'footer', 'header')
     inlines = [ContentAdminInline]
 
 
@@ -58,12 +58,12 @@ class PeopleAdmin(TranslationStackedInline):
 
 
 class AboutUsPageAdmin(TabbedTranslationAdmin):
-    exclude = ('id', )
+    exclude = ('id', 'footer', 'header')
     inlines = [PeopleAdmin]
 
 
 class ProjectsPageAdmin(TabbedTranslationAdmin):
-    exclude = ('id', )
+    exclude = ('id', 'footer', 'header')
     inlines = [ProjectAdminInline]
 
 
@@ -80,12 +80,12 @@ class InfluncerPhotoAdminInline(TranslationStackedInline):
 
 
 class InfluencerAdmin(TabbedTranslationAdmin):
-    exclude = ('id', )
+    exclude = ('id', 'footer', 'header')
     inlines = [InfluencersMembersAdminInline, InfluncerPhotoAdminInline]
 
 
 class InfluencersPageAdmin(TabbedTranslationAdmin):
-    exclude = ('id', )
+    exclude = ('id', 'footer', 'header')
 
 
 class VoiceAdminInline(TranslationStackedInline):
@@ -116,12 +116,12 @@ class DubSeriesAdminInline(TranslationStackedInline):
 
 
 class DubStudioPageAdmin(TabbedTranslationAdmin):
-    exclude = ('id', )
+    exclude = ('id', 'footer', 'header')
     inlines = [DubSeriesAdminInline, DubMoviesAdminInline]
 
 
 class AnimationStudioPageAdmin(TabbedTranslationAdmin):
-    exclude = ('id', )
+    exclude = ('id', 'footer', 'header')
 
 
 class SeriesFilmsAdminInline(TranslationStackedInline):
@@ -132,7 +132,7 @@ class SeriesFilmsAdminInline(TranslationStackedInline):
 
 
 class SeriesFilmsPageAdmin(TabbedTranslationAdmin):
-    exclude = ('id', )
+    exclude = ('id', 'footer', 'header')
     inlines = [SeriesFilmsAdminInline]
 
 
@@ -144,7 +144,7 @@ class GameAdminInline(TranslationStackedInline):
 
 
 class GameDevPageAdmin(TabbedTranslationAdmin):
-    exclude = ('id', )
+    exclude = ('id', 'footer', 'header')
     inlines = [GameAdminInline]
 
 
