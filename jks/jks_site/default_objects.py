@@ -516,8 +516,9 @@ def create_default_game():
             'android_statistics': '',
             'android': 'на android',
             'title': 'Найди каждому пару',
-            'appstore_url': 'https://apps.apple.com/ru/app/yolo-run/id1582190271?l=en',
-            'googleplay_url': 'https://play.google.com/store/apps/details?id=com.PimpochkaGames.YoloRun&hl=ru&gl=US',
+            'appstore_url': 'https://apps.apple.com/kz/app/bip-house-ride/id1635620022',
+            'googleplay_url': 'https://play.google.com/store/apps/details?id=com.PimpochkaGames.BipHouseRide&hl=ru&gl'
+                              '=US',
             'page': '1'
         }
     ]
