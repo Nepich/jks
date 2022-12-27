@@ -143,7 +143,7 @@ class InfluencerDetailSerializer(BasePageSerializer, serializers.ModelSerializer
     influencer_photo = InfluncerPhotoSerializer(many=True, read_only=True)
     influencer_member = InfluencerMembersSerializer(many=True, read_only=True)
     fields_to_be_removed = ('influencer_photo', 'influencer_member', 'instagram_statistics', 'instagram',
-                            'tiktok_statistics', 'tiktok', 'youtube_statistics', 'youtube')
+                            'tiktok_statistics', 'tiktok', 'youtube_statistics', 'youtube', 'description')
 
     class Meta:
         model = apps.get_model(app_label='jks_site', model_name='Influencer')

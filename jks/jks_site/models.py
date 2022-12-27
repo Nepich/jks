@@ -333,7 +333,7 @@ class InfluencersPage(BasePageModel):
 
 
 class Influencer(BasePageModel, models.Model):
-    logo = ResizedImageField(force_format='WEBP', quality=100, upload_to='influencer/',
+    logo = ResizedImageField(force_format='WEBP', quality=100, blank=True, upload_to='influencer/',
                              verbose_name="Логотип инфлюенсера/дома")
     name = models.CharField(max_length=100, default="", verbose_name="Имя/название дома")
     statistics = models.CharField(max_length=100, default="Статистика", verbose_name="Заголовок блока статистика")
@@ -346,8 +346,8 @@ class Influencer(BasePageModel, models.Model):
     youtube_statistics = models.CharField(max_length=100, default="В youtube",
                                           verbose_name="Заголовок статистика youtube", blank=True)
     youtube = models.CharField(max_length=100, verbose_name="Статистика youtube", blank=True)
-    description = models.TextField(verbose_name="Описание инфлюенсера/дома")
-    page = models.ForeignKey(InfluencersPage, on_delete=models.CASCADE, related_name='influencer')
+    description = models.TextField(verbose_name="Описание инфлюенсера/дома", blank=True)
+    page = models.ForeignKey(InfluencersPage, default=1, on_delete=models.CASCADE, related_name='influencer')
 
     class Meta:
         verbose_name = 'Страница инфлюенсера/тик-ток дома'
@@ -410,8 +410,8 @@ class InfluencerMembers(models.Model):
 
 class DubStudioPage(BasePageModel):
     photo = ResizedImageField(force_format='WEBP', quality=100, upload_to='dub_studio/',
-                              verbose_name="Фото страницы студия дубляжа")
-    video = models.FileField(upload_to='dub_studio/', verbose_name="Видео страницы студия дубляжа")
+                              verbose_name="Фото страницы студия дубляжа", blank=True)
+    video = models.FileField(upload_to='dub_studio/', verbose_name="Видео страницы студия дубляжа", blank=True)
     first_text = models.CharField(max_length=100, verbose_name="Первый заголовок")
     first_text_desc = models.TextField(verbose_name="Первое описание")
     second_text = models.CharField(max_length=100,  verbose_name="Второй заголовок")
@@ -435,8 +435,9 @@ class DubStudioPage(BasePageModel):
 
 class BaseDubProjects(models.Model):
     name = models.CharField(max_length=100, verbose_name="Название проекта")
-    photo = ResizedImageField(force_format='WEBP', quality=100, upload_to='dub_projects/', verbose_name="Фото проекта")
-    preview = models.FileField(upload_to='dub_projects/', verbose_name="Превью проекта")
+    photo = ResizedImageField(force_format='WEBP', quality=100, upload_to='dub_projects/', verbose_name="Фото проекта",
+                              blank=True)
+    preview = models.FileField(upload_to='dub_projects/', verbose_name="Превью проекта", blank=True)
     dub_language = models.CharField(max_length=255, default="Язык дубляжа: ", verbose_name="Язык дубляжа")
     translated_by = models.CharField(max_length=100, default="Перевели: ", verbose_name="Кто перевел")
     button = models.CharField(max_length=100, default="Смотреть сейчас", verbose_name="Текст кнопки")
@@ -475,7 +476,8 @@ class DubSeries(BaseDubProjects):
 
 
 class Studio(models.Model):
-    logo = ResizedImageField(force_format='WEBP', quality=100, upload_to='dub_studio/', verbose_name="Логотип студии")
+    logo = ResizedImageField(force_format='WEBP', quality=100, upload_to='dub_studio/', verbose_name="Логотип студии",
+                             blank=True)
     name = models.CharField(max_length=100, default="", verbose_name="Название студии")
     page = models.ForeignKey(DubStudioPage, on_delete=models.CASCADE, related_name='studio')
 
@@ -490,8 +492,8 @@ class Studio(models.Model):
 class Voice(models.Model):
     name = models.CharField(max_length=100, verbose_name="Имя переводившего")
     photo = ResizedImageField(force_format='WEBP', quality=100, upload_to='dub_studio/',
-                              verbose_name="Фото переводившего")
-    voice = models.FileField(upload_to='dub_studio/', verbose_name="Запись голоса")
+                              verbose_name="Фото переводившего", blank=True)
+    voice = models.FileField(upload_to='dub_studio/', verbose_name="Запись голоса", blank=True)
     studio = models.ForeignKey(Studio, on_delete=models.CASCADE, verbose_name="Отношение к студии",
                                related_name='voice')
 
@@ -529,7 +531,7 @@ class AnimationStudioPage(BasePageModel):
 
 class SeriesFilmsPage(BasePageModel):
     photo = ResizedImageField(force_format='WEBP', quality=100, upload_to='series/',
-                              verbose_name="Изображение страницы")
+                              verbose_name="Изображение страницы", blank=True)
     title = models.CharField(max_length=100, default="Королева двора", verbose_name="Заголовок проекта")
     description = models.TextField(verbose_name="Описание проекта")
     projects = models.CharField(max_length=100, default="Работы", verbose_name="Заголовок работы")
@@ -555,7 +557,8 @@ class SeriesFilms(models.Model):
     genre = models.CharField(max_length=100, default="Жанр: ", verbose_name="Жанр")
     button = models.CharField(max_length=100, default="Смотреть сейчас", verbose_name="Кнопка смотреть сейчас")
     url = models.URLField(verbose_name="Ссылка на проект")
-    photo = ResizedImageField(force_format='WEBP', quality=100, upload_to='series/', verbose_name="Фото проекта", null=True, blank=True)
+    photo = ResizedImageField(force_format='WEBP', quality=100, upload_to='series/', verbose_name="Фото проекта",
+                              null=True, blank=True)
     preview = models.FileField(upload_to='series/', verbose_name="Превью проекта", null=True, blank=True)
     page = models.ForeignKey(SeriesFilmsPage, on_delete=models.CASCADE, related_name='series_films')
 
@@ -579,9 +582,12 @@ class GameDevPage(BasePageModel):
     first_text_desc = models.TextField(verbose_name="Первое описание")
     second_text = models.CharField(max_length=100, verbose_name="Второй заголовок")
     second_text_desc = models.TextField(verbose_name="Второе описание")
-    photo_background1 = ResizedImageField(quality=100, upload_to='game_dev/', verbose_name="Фото подложки 1")
-    photo_background2 = ResizedImageField(quality=100, upload_to='game_dev/', verbose_name="Фото подложки 2")
-    photo_background3 = ResizedImageField(quality=100, upload_to='game_dev/', verbose_name="Фото подложки 3")
+    photo_background1 = ResizedImageField(quality=100, upload_to='game_dev/', verbose_name="Фото подложки 1",
+                                          blank=True)
+    photo_background2 = ResizedImageField(quality=100, upload_to='game_dev/', verbose_name="Фото подложки 2",
+                                          blank=True)
+    photo_background3 = ResizedImageField(quality=100, upload_to='game_dev/', verbose_name="Фото подложки 3",
+                                          blank=True)
 
     def save(self, *args, **kwargs):
         if self.__class__.objects.count():
@@ -598,11 +604,12 @@ class GameDevPage(BasePageModel):
 
 class Game(models.Model):
     name = models.CharField(max_length=100, default="", verbose_name="Название игры")
-    photo = ResizedImageField(force_format='WEBP', quality=100, upload_to='gamedev/', verbose_name="Изображение игры")
+    photo = ResizedImageField(force_format='WEBP', quality=100, upload_to='gamedev/', verbose_name="Изображение игры",
+                              blank=True)
     statistics = models.CharField(max_length=100, default="Статистика ", verbose_name="Заголовок статистики")
-    ios_statistics = models.CharField(max_length=100, verbose_name="IOS статистика")
+    ios_statistics = models.CharField(max_length=100, verbose_name="IOS статистика", blank=True)
     ios = models.CharField(max_length=100, default="на ios", verbose_name="Заголовок IOS статистики")
-    android_statistics = models.CharField(max_length=100, verbose_name="Android статистика")
+    android_statistics = models.CharField(max_length=100, verbose_name="Android статистика", blank=True)
     android = models.CharField(max_length=100, default="на android", verbose_name="Заголовок Android статистики")
     title = models.CharField(max_length=100, default="Найди каждому пару", verbose_name="Заголовок ссылок")
     appstore_url = models.URLField(verbose_name="Ссылка на проект в AppStore")
