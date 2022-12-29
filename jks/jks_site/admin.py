@@ -5,7 +5,7 @@ from .models import *
 
 
 @admin.register(Header)
-class HeaderAdmin(admin.ModelAdmin):
+class HeaderAdmin(TabbedTranslationAdmin):
     fields = ('about_us', 'projects', 'contacts', 'logo', 'logo_image')
     readonly_fields = ('logo_image', )
 
@@ -80,7 +80,7 @@ class InfluncerPhotoAdminInline(TranslationStackedInline):
 
 
 class InfluencerAdmin(TabbedTranslationAdmin):
-    exclude = ('id', 'footer', 'header')
+    exclude = ('id', 'footer', 'header', 'page')
     inlines = [InfluencersMembersAdminInline, InfluncerPhotoAdminInline]
 
 
@@ -97,7 +97,7 @@ class VoiceAdminInline(TranslationStackedInline):
 
 @admin.register(Studio)
 class StudioAdmin(admin.ModelAdmin):
-    exclude = ('id', )
+    exclude = ('id', 'page')
     inlines = [VoiceAdminInline]
 
 

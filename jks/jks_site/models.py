@@ -213,6 +213,7 @@ class VideoProductionPage(BasePageModel):
         return 'Страница "Видеопродакшн"'
 
 
+
 class Content(models.Model):
     page = models.ForeignKey(VideoProductionPage, on_delete=models.SET_NULL, null=True, related_name='page_content',
                              default=1)
