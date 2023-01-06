@@ -1,3 +1,5 @@
+import logging
+
 from django.apps import apps
 from django.utils import translation
 from rest_framework.generics import RetrieveAPIView, CreateAPIView
@@ -122,4 +124,4 @@ class FormView(CreateAPIView):
             send_telegram(self.request.data, interest)
             serializer.save()
         except Exception as e:
-            print(e)
+            logging.warning(e)

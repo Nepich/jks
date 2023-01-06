@@ -1,0 +1,44 @@
+version: '3.9'
+
+services:
+  redis:
+    image: redis:7.0.7-alpine3.17
+    container_name: redis
+
+  app:
+    container_name: jks
+    build: .
+    command: uvicorn jks.asgi:application --host 0.0.0.0 --port 8000
+    expose:
+      - 8000
+    volumes:
+      - static_volume:/home/jks/app/static_back
+      - media_volume:/home/jks/app/media_back
+    depends_on:
+      - redis
+
+  celery:
+    restart: always
+    build: .
+    command: celery -A jks worker -l INFO
+    volumes:
+      - .:/django
+    container_name: celery
+    depends_on:
+      - app
+      - redis
+
+  nginx:
+    build: ./nginx
+    container_name: nginx
+    volumes:
+      - static_volume:/home/jks/app/static_back
+      - media_volume:/home/jks/app/media_back
+    ports:
+      - 80:80
+    depends_on:
+      - app
+
+volumes:
+  static_volume:
+  media_volume:

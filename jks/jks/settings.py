@@ -130,12 +130,13 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 
-STATIC_URL = 'static/'
-# STATIC_URL = '/static-back/'
+# STATIC_URL = 'static/'
+STATIC_URL = '/static_back/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static_back')
 
-MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+# MEDIA_URL = '/media/'
+MEDIA_URL = '/media_back/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media_back')
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
@@ -218,7 +219,7 @@ JAZZMIN_SETTINGS = {
                                     "jks_site.GameDevPage": "vertical_tabs"},
 }
 
-REDIS_HOST = '127.0.0.1'
+REDIS_HOST = 'redis'
 REDIS_PORT = '6379'
 CELERY_BROKER_URL = 'redis://' + REDIS_HOST + ':' + REDIS_PORT + '/0'
 CELERY_BROKER_TRANSPORT_OPTIONS = {'visibility_timeout': 3600}
@@ -234,3 +235,28 @@ CORS_ALLOW_ALL_ORIGINS: True
 # SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
 # CSRF_TRUSTED_ORIGINS = ['https://*.foodpackaging.kz', 'https://*.foodpackaging.kz/api/v1/create']
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'file_format': {
+            'format': '{levelname} - {asctime} - {module} - {filename} - {message}',
+            'style': '{',
+        },
+    },
+    'handlers': {
+        'file': {
+            'class': 'logging.FileHandler',
+            'formatter': 'file_format',
+            'filename': 'log_django.log',
+        },
+    },
+    'loggers': {
+        'main': {
+            'handlers': ['file'],
+            'level': 'WARNING',
+            'propagate': True,
+        },
+    },
+}
