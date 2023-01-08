@@ -120,8 +120,8 @@ class FormView(CreateAPIView):
             mail_to = [recepient['email'] for recepient in Manager.objects.all().values('email')]
             data = self.request.data
             interest = apps.get_model(app_label='jks_site', model_name='Choices').objects.get(pk=data["type"]).type
-            send_mail(self.request.data, interest, mail_to)
-            send_telegram(self.request.data, interest)
+            send_mail.delay(self.request.data, interest, mail_to)
+            send_telegram.delay(self.request.data, interest)
             serializer.save()
         except Exception as e:
             logging.warning(e)
